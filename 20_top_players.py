@@ -12,7 +12,7 @@ print(Colours.ORANGE.apply_to_string("Getting all mcf data..."))
 all_mcfs = mcf.get_all()
 
 print(Colours.BLUE.apply_to_string("Getting information on top mcf players..."))
-relevant_players = [player for player in mcf.get_top_players(max_players = 30)]
+relevant_players = mcf.get_top_players(max_players = 20)
 
 score_count:Dict[str, TournamentPlayer] = {}
 
@@ -64,6 +64,6 @@ bcr.bar_chart_race(
     tick_label_size = 20,
     steps_per_period = 30,
     period_length = 1000,
-    filename = 'video.mp4',
+    filename = "video.mp4",
     figsize = (18, 10.5)
 )
