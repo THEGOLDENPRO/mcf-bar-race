@@ -1,4 +1,5 @@
 import csv
+import sys
 import pandas as pd
 import bar_chart_race as bcr
 from devgoldyutils import Colours
@@ -11,7 +12,7 @@ print(Colours.ORANGE.apply_to_string("Getting all mcf data..."))
 all_mcfs = mcf.get_all()
 
 print(Colours.BLUE.apply_to_string("Getting information on top mcf players..."))
-relevant_players = [player for player in mcf.get_top_players(max_players = 9999)]
+relevant_players = [player for player in mcf.get_top_players(max_players = 30)]
 
 score_count:Dict[str, TournamentPlayer] = {}
 
@@ -19,6 +20,8 @@ for player in relevant_players:
     player.score = 0 # Zero all scores.
     score_count[player.uuid] = player
 
+# Create csv file.
+# ------------------
 with open("./temp.csv", "w", newline="") as file:
     writer = csv.writer(file)
 
@@ -40,9 +43,11 @@ with open("./temp.csv", "w", newline="") as file:
                     )
 
                     break
-            
+
             if not player_found:
                 player_scores.append(score_count[relevant_player_uuid].score)
+
+            sys.stdout.write(Colours.PINK_GREY.apply_to_string(f"Done player '{relevant_player_uuid}'.") + "\n")
 
         writer.writerow([mcf.display_name] + player_scores)
         print(Colours.GREEN.apply_to_string(f"Done mcf '{mcf.display_name}'."))
@@ -52,13 +57,13 @@ with open("./temp.csv", "w", newline="") as file:
 # -------------------------
 df = pd.read_csv("./temp.csv", index_col="Date")
 
-print(Colours.PINK_GREY.apply_to_string("Generating bar chart race..."))
+print(Colours.PURPLE.apply_to_string("Generating bar chart race..."))
 bcr.bar_chart_race(
     df = df,
     bar_label_size = 19,
     tick_label_size = 20,
     steps_per_period = 30,
     period_length = 1000,
-    filename = 'video3.mp4',
+    filename = 'video.mp4',
     figsize = (18, 10.5)
 )
